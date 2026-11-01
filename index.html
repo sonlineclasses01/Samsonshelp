@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<!--
+  Samson's Help
+  Created by Samson Ekutu. Original work. All rights reserved.
+  First built: October 2026
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Samson Ekutu">
+<meta name="copyright" content="Samson Ekutu">
+<meta name="description" content="Samson's Help by Samson Ekutu. Ask anything. Learn anything.">
+<meta name="theme-color" content="#0f1020">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237c5cff'/%3E%3Cstop offset='1' stop-color='%2300d4ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%230f1020'/%3E%3Ccircle cx='32' cy='32' r='24' fill='url(%23g)'/%3E%3Ctext x='32' y='41' font-family='Arial' font-size='26' font-weight='bold' text-anchor='middle' fill='white'%3ESE%3C/text%3E%3C/svg%3E">
+<title>Samson's Help by Samson Ekutu</title>
+<style>
+  *{box-sizing:border-box}
+  :root{--bg1:#0f1020;--card:#23244a;--accent:#7c5cff;--accent2:#00d4ff;--text:#eef0ff;--muted:#9aa0c8}
+  body{margin:0;font-family:'Segoe UI',Arial,sans-serif;color:var(--text);height:100vh;display:flex;flex-direction:column;
+       background:radial-gradient(circle at 20% 0%,#2a1f6b 0%,var(--bg1) 45%),var(--bg1)}
+  header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;padding:10px 14px;
+         background:rgba(26,27,58,.85);backdrop-filter:blur(8px);border-bottom:1px solid rgba(124,92,255,.35);
+         box-shadow:0 4px 24px rgba(124,92,255,.25)}
+  .logo{display:flex;align-items:center;gap:10px}
+  .orb{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));
+       box-shadow:0 0 16px var(--accent2);animation:pulse 3s infinite;display:flex;align-items:center;justify-content:center;
+       font-size:14px;font-weight:bold;color:#fff;letter-spacing:-1px}
+  @keyframes pulse{50%{box-shadow:0 0 28px var(--accent)}}
+  h1{font-size:19px;margin:0;background:linear-gradient(90deg,#fff,var(--accent2));-webkit-background-clip:text;color:transparent}
+  .tag{font-size:11px;color:var(--muted)}
+  .tools button{background:rgba(255,255,255,.08);color:var(--text);border:1px solid rgba(255,255,255,.15);border-radius:8px;
+                padding:6px 9px;margin:2px 0 2px 4px;font-size:12px;cursor:pointer;transition:.2s}
+  .tools button:hover{background:var(--accent)}
+  #chat{flex:1;overflow-y:auto;padding:18px 14px;scroll-behavior:smooth}
+  .row{display:flex;flex-direction:column;margin:9px 0}
+  .row.user{align-items:flex-end}
+  .row.bot{align-items:flex-start}
+  .msg{max-width:86%;padding:11px 15px;border-radius:16px;line-height:1.55;animation:pop .25s ease;word-wrap:break-word}
+  @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .user .msg{background:linear-gradient(135deg,var(--accent),#4f7bff);border-bottom-right-radius:4px;white-space:pre-wrap}
+  .bot .msg{background:var(--card);border:1px solid rgba(124,92,255,.25);border-bottom-left-radius:4px}
+  .msg h3,.msg h4{margin:10px 0 4px}
+  .msg ul,.msg ol{margin:6px 0;padding-left:22px}
+  .msg p{margin:6px 0}
+  .msg code{background:#14152e;padding:2px 6px;border-radius:5px;font-family:Consolas,monospace;font-size:13px}
+  .msg pre{background:#0b0c1c;padding:12px;border-radius:10px;overflow-x:auto;border:1px solid rgba(0,212,255,.25)}
+  .msg pre code{background:none;padding:0}
+  .msg img{max-width:220px;border-radius:10px;display:block;margin-bottom:6px}
+  .copy{background:none;border:0;color:var(--muted);font-size:12px;cursor:pointer;margin-top:3px;padding:2px 4px}
+  .copy:hover{color:var(--accent2)}
+  #suggest{display:flex;flex-wrap:wrap;gap:8px;padding:0 14px 8px}
+  #suggest button{background:transparent;color:var(--accent2);border:1px solid var(--accent2);border-radius:20px;
+                  padding:7px 13px;font-size:13px;cursor:pointer;transition:.2s}
+  #suggest button:hover{background:var(--accent2);color:#06101f}
+  #status{font-size:12px;color:var(--muted);padding:0 16px 4px;min-height:18px}
+  #preview{display:none;padding:0 14px 6px;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+  #preview img{height:46px;border-radius:8px}
+  #preview button{background:none;border:0;color:#ff7b7b;cursor:pointer;font-size:13px}
+  form{display:flex;gap:7px;padding:12px;background:rgba(26,27,58,.92);border-top:1px solid rgba(124,92,255,.3);align-items:center}
+  input[type=text]{flex:1;min-width:0;padding:13px 15px;border-radius:24px;border:1px solid rgba(255,255,255,.18);
+                   background:#14152e;color:var(--text);font-size:16px;outline:none}
+  input[type=text]:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(0,212,255,.15)}
+  form button{border:0;border-radius:50%;width:44px;height:44px;font-size:12px;color:#fff;cursor:pointer;flex-shrink:0}
+  #mic{background:#18a058}
+  #mic.listening{background:#e53935;animation:pulse 1s infinite}
+  #photo{background:#3b3f7a}
+  #send{background:linear-gradient(135deg,var(--accent),var(--accent2))}
+  #stop{background:#e53935;display:none}
+  #credit{text-align:center;font-size:11px;color:var(--muted);padding:0 0 8px;background:rgba(26,27,58,.92)}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <div class="orb">SE</div>
+    <div><h1>Samson's Help</h1><div class="tag">by Samson Ekutu · Ask anything. Learn anything.</div></div>
+  </div>
+  <div class="tools">
+    <button id="modeBtn">Mode: General</button>
+    <button id="speakToggle">Voice: ON</button>
+    <button id="memBtn">Memory</button>
+    <button id="dlBtn">Download</button>
+    <button id="newChat">New</button>
+  </div>
+</header>
+
+<div id="chat"></div>
+<div id="suggest"></div>
+<div id="preview"><img id="prevImg" alt=""><span>Photo ready to send</span><button type="button" id="prevX">Remove</button></div>
+<div id="status"></div>
+
+<form id="form">
+  <button type="button" id="mic" title="Tap and speak">Mic</button>
+  <button type="button" id="photo" title="Add a photo">Photo</button>
+  <input type="file" id="file" accept="image/*" style="display:none">
+  <input type="text" id="input" placeholder="Message Samson's Help..." autocomplete="off">
+  <button type="button" id="stop" title="Stop">Stop</button>
+  <button type="submit" id="send" title="Send">Go</button>
+</form>
+<div id="credit">Samson's Help · Created by Samson Ekutu · © 2026 All rights reserved</div>
+
+<script>
+// Samson's Help · Created by Samson Ekutu · Original work
+// ================= SETTINGS =================
+const MAX_MESSAGES = 30;
+
+// ================= STORAGE =================
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem('sh_' + k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem('sh_' + k, JSON.stringify(v)); }catch(e){} }
+};
+let history = store.get('history', []);
+let memory  = store.get('memory', []);
+let mode    = store.get('mode', 'General');
+let speakOn = store.get('speak', true);
+let pendingImage = null;      // {mime, data, url}
+let controller = null;        // for the stop button
+
+// ================= ELEMENTS =================
+const $ = id => document.getElementById(id);
+const chat = $('chat'), form = $('form'), input = $('input'), statusEl = $('status');
+const micBtn = $('mic'), speakBtn = $('speakToggle'), modeBtn = $('modeBtn');
+const suggest = $('suggest'), stopBtn = $('stop'), sendBtn = $('send');
+
+// ================= FORMATTING =================
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function inline(s){
+  return s.replace(/`([^`]+)`/g,'<code>$1</code>')
+          .replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>')
+          .replace(/(^|[^*])\*([^*\n]+)\*/g,'$1<i>$2</i>');
+}
+function format(text){
+  const parts = esc(text).split(/```/);
+  let out = '';
+  parts.forEach((part, i) => {
+    if(i % 2 === 1){
+      out += '<pre><code>' + part.replace(/^[a-zA-Z0-9]*\n/, '') + '</code></pre>';
+      return;
+    }
+    let html = '', list = null;
+    const close = () => { if(list){ html += '</' + list + '>'; list = null; } };
+    part.split('\n').forEach(line => {
+      let m;
+      if((m = line.match(/^\s*[-*]\s+(.*)/))){
+        if(list !== 'ul'){ close(); html += '<ul>'; list = 'ul'; }
+        html += '<li>' + inline(m[1]) + '</li>';
+      } else if((m = line.match(/^\s*\d+[.)]\s+(.*)/))){
+        if(list !== 'ol'){ close(); html += '<ol>'; list = 'ol'; }
+        html += '<li>' + inline(m[1]) + '</li>';
+      } else if((m = line.match(/^#{1,4}\s+(.*)/))){
+        close(); html += '<h4>' + inline(m[1]) + '</h4>';
+      } else if(line.trim() === ''){
+        close();
+      } else {
+        close(); html += '<p>' + inline(line) + '</p>';
+      }
+    });
+    close();
+    out += html;
+  });
+  return out;
+}
+
+// ================= UI HELPERS =================
+function addUser(text, imgUrl){
+  const row = document.createElement('div'); row.className = 'row user';
+  const d = document.createElement('div'); d.className = 'msg';
+  if(imgUrl){ const im = document.createElement('img'); im.src = imgUrl; d.appendChild(im); }
+  d.appendChild(document.createTextNode(text));
+  row.appendChild(d); chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+}
+function addBot(text){
+  const row = document.createElement('div'); row.className = 'row bot';
+  const d = document.createElement('div'); d.className = 'msg';
+  row.appendChild(d);
+  const c = document.createElement('button'); c.className = 'copy'; c.textContent = 'Copy';
+  c.onclick = () => {
+    navigator.clipboard.writeText(d.dataset.raw || d.textContent);
+    c.textContent = 'Copied!'; setTimeout(() => c.textContent = 'Copy', 1500);
+  };
+  row.appendChild(c); chat.appendChild(row);
+  setBot(d, text);
+  chat.scrollTop = chat.scrollHeight;
+  return d;
+}
+function setBot(d, text, isFinal){
+  d.dataset.raw = isFinal ? text : '';
+  d.innerHTML = isFinal ? format(text) : esc(text);
+  chat.scrollTop = chat.scrollHeight;
+}
+function refreshButtons(){
+  speakBtn.textContent = 'Voice: ' + (speakOn ? 'ON' : 'OFF');
+  modeBtn.textContent = 'Mode: ' + mode;
+}
+function showSuggestions(){
+  suggest.innerHTML = '';
+  if(history.length) return;
+  ['Explain photosynthesis simply','Help me write a professional email','Give me a 7-day study plan','Tell me an interesting fact']
+  .forEach(t => {
+    const b = document.createElement('button'); b.textContent = t;
+    b.onclick = () => { input.value = t; form.requestSubmit(); };
+    suggest.appendChild(b);
+  });
+}
+function renderHistory(){
+  chat.innerHTML = '';
+  if(!history.length){
+    const d = addBot("Hello! I'm Samson's Help. Ask me anything. Type, tap Mic to speak, or tap Photo to show me a picture. Say 'remember that...' and I will keep it in mind for next time.");
+    setBot(d, d.textContent, true);
+  } else {
+    history.forEach(m => {
+      const text = m.parts.map(p => p.text || '').join('');
+      if(m.role === 'user'){ addUser(text); }
+      else { const d = addBot(''); setBot(d, text, true); }
+    });
+  }
+  showSuggestions();
+}
+
+// ================= MEMORY =================
+function captureMemory(text){
+  const t = text.trim();
+  let m = t.match(/^(?:please\s+)?remember(?:\s+that)?\s+(.+)/i);
+  if(m){ addMemory(m[1]); return; }
+  m = t.match(/\bmy name is\s+([A-Za-z' -]{2,30})/i);
+  if(m){ addMemory("The user's name is " + m[1].trim()); }
+}
+function addMemory(note){
+  note = note.replace(/[.!?]+$/, '').trim();
+  if(note && !memory.includes(note)){ memory.push(note); store.set('memory', memory); }
+}
+$('memBtn').onclick = () => {
+  if(!memory.length){ alert('I have no saved notes yet. Say "remember that..." and I will keep it.'); return; }
+  const list = memory.map((n, i) => (i + 1) + '. ' + n).join('\n');
+  if(confirm('Things I remember:\n\n' + list + '\n\nPress OK to CLEAR all memory, or Cancel to keep it.')){
+    memory = []; store.set('memory', memory);
+  }
+};
+
+// ================= VOICE OUT =================
+function speak(text){
+  if(!speakOn || !('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text.replace(/[*#_`]/g, ''));
+  u.lang = 'en-GB';
+  window.speechSynthesis.speak(u);
+}
+speakBtn.onclick = () => {
+  speakOn = !speakOn; store.set('speak', speakOn); refreshButtons();
+  if(!speakOn) window.speechSynthesis.cancel();
+};
+
+// ================= VOICE IN =================
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let rec = null;
+if(SR){
+  rec = new SR(); rec.lang = 'en-US'; rec.interimResults = false;
+  rec.onstart = () => { micBtn.classList.add('listening'); statusEl.textContent = 'Listening...'; };
+  rec.onend = () => { micBtn.classList.remove('listening'); statusEl.textContent = ''; };
+  rec.onerror = () => { statusEl.textContent = 'Could not hear you. Please try again.'; };
+  rec.onresult = e => { input.value = e.results[0][0].transcript; form.requestSubmit(); };
+}
+micBtn.onclick = () => {
+  if(!rec){ alert('Voice input works in Chrome and Edge.'); return; }
+  window.speechSynthesis.cancel(); rec.start();
+};
+
+// ================= MODE =================
+modeBtn.onclick = () => { mode = (mode === 'General') ? 'Study' : 'General'; store.set('mode', mode); refreshButtons(); };
+
+// ================= PHOTO =================
+$('photo').onclick = () => $('file').click();
+$('file').onchange = e => {
+  const f = e.target.files[0]; if(!f) return;
+  const img = new Image(); const url = URL.createObjectURL(f);
+  img.onload = () => {
+    const max = 1024, scale = Math.min(1, max / Math.max(img.width, img.height));
+    const cv = document.createElement('canvas');
+    cv.width = Math.round(img.width * scale); cv.height = Math.round(img.height * scale);
+    cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+    const dataUrl = cv.toDataURL('image/jpeg', 0.8);
+    pendingImage = { mime: 'image/jpeg', data: dataUrl.split(',')[1], url: dataUrl };
+    $('prevImg').src = dataUrl; $('preview').style.display = 'flex';
+    URL.revokeObjectURL(url);
+  };
+  img.src = url; e.target.value = '';
+};
+$('prevX').onclick = () => { pendingImage = null; $('preview').style.display = 'none'; };
+
+// ================= STOP =================
+stopBtn.onclick = () => {
+  if(controller) controller.abort();
+  window.speechSynthesis.cancel();
+};
+
+// ================= DOWNLOAD =================
+$('dlBtn').onclick = () => {
+  if(!history.length){ alert('There is no chat to download yet.'); return; }
+  const text = history.map(m => (m.role === 'user' ? 'You: ' : "Samson's Help: ") + m.parts.map(p => p.text || '').join('')).join('\n\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain' }));
+  a.download = 'samsons-help-chat.txt'; a.click();
+};
+
+// ================= SEND =================
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const text = input.value.trim();
+  if(!text && !pendingImage) return;
+
+  const userText = text || 'Please help me with this picture.';
+  input.value = ''; suggest.innerHTML = '';
+  if(!history.length) chat.innerHTML = '';
+  addUser(userText, pendingImage && pendingImage.url);
+  captureMemory(userText);
+
+  const parts = [{ text: userText }];
+  if(pendingImage){ parts.push({ inlineData: { mimeType: pendingImage.mime, data: pendingImage.data } }); }
+  history.push({ role: 'user', parts });
+  pendingImage = null; $('preview').style.display = 'none';
+
+  const botDiv = addBot('Thinking...');
+  controller = new AbortController();
+  stopBtn.style.display = 'block'; sendBtn.style.display = 'none';
+
+  try{
+    const res = await fetch('/.netlify/functions/chat', {
+      method: 'POST', signal: controller.signal,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mode, memory, contents: history.slice(-MAX_MESSAGES) })
+    });
+    if(res.status === 429){
+      setBot(botDiv, "Samson's Help is very busy right now. The free limit was reached. Please try again in a few minutes.");
+      history.pop(); return;
+    }
+    const data = await res.json();
+    if(data.error){ setBot(botDiv, 'Error: ' + data.error); history.pop(); return; }
+    const reply = data.reply || 'Sorry, I could not answer that.';
+    setBot(botDiv, reply, true);
+    history.push({ role: 'model', parts: [{ text: reply }] });
+    // Save history as text only (images are not stored)
+    store.set('history', history.slice(-100).map(m => ({ role: m.role, parts: [{ text: m.parts.map(p => p.text || '').join('') }] })));
+    speak(reply);
+  }catch(err){
+    if(err.name === 'AbortError'){ setBot(botDiv, 'Stopped.'); }
+    else { setBot(botDiv, 'Something went wrong. Please check your internet and try again.'); }
+    history.pop();
+  }finally{
+    controller = null; stopBtn.style.display = 'none'; sendBtn.style.display = 'block';
+  }
+});
+
+// ================= NEW CHAT =================
+$('newChat').onclick = () => {
+  history = []; store.set('history', history);
+  window.speechSynthesis.cancel(); renderHistory();
+};
+
+// ================= START =================
+refreshButtons();
+renderHistory();
+</script>
+</body>
+</html>
